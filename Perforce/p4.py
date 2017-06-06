@@ -1,3 +1,12 @@
+# p4.py - Ahmad Fauzan Umar @ 2017
+# Perforce-python simple library
+# Current features :
+# - Checkout file
+# - Revert file
+# - Sync file
+# TODO :
+#
+
 import os
 import subprocess
 
