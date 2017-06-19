@@ -114,6 +114,7 @@ class Project:
 			subprocess.Popen(commands, shell=False)
 
 if __name__ == "__main__":
+	pass
 	#project = Project("<ProjectPath>")
 	#project.Build("<Project>Editor", "Win64", "Development", True)
 	#project.Package("Development", "Win32", True, True, True, "archivepath")
