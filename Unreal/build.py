@@ -6,6 +6,7 @@
 import ProjectParser
 import getopt
 import sys
+import os
 
 def main(projectfile, argv):
 	try:
@@ -36,7 +37,7 @@ def main(projectfile, argv):
 		print "--module need to set"
 		sys.exit()
 
-	project = ProjectParser.Project( projectfile )
+	project = ProjectParser.Project( os.path.abspath(projectfile) )
 	project.Build(module_name, platform, config, rebuild)
 
 if __name__ == "__main__":
