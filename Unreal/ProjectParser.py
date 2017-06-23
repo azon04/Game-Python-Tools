@@ -87,7 +87,7 @@ class Project:
 
 	def GenerateVSProject(self):
 		# See HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\EpicGames\Unreal Engine
-		# and UnrealVersionSelector.exe /projectfile FOLDER_OF_THE_PROJECT
+		# and UnrealVersionSelector.exe /projectfiles FOLDER_OF_THE_PROJECT
 		if self.unreal_version.startswith( "4." ):
 			regHandle = _winreg.ConnectRegistry(None, _winreg.HKEY_LOCAL_MACHINE)
 			key = _winreg.OpenKeyEx(regHandle, "SOFTWARE\\EpicGames\\Unreal Engine")

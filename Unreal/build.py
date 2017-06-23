@@ -33,7 +33,7 @@ def main(projectfile, argv):
 			print "Usage : build.py <projectFile> --module=<moduleName> --platform=<platform> --config=<config> --rebuild"
 			sys.exit()
 
-	if module_name == "" :
+	if module_name == "":
 		print "--module need to set"
 		sys.exit()
 
