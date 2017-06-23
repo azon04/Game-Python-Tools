@@ -31,7 +31,7 @@ def main(projectfile, argv):
 		elif o in ("-c", "--config"):
 			config = a
 		elif o in ("-o", "--output"):
-			output = a
+			output = os.path.abspath(a)
 		elif o == "--build":
 			build = True
 		elif o == "--cook":
@@ -40,7 +40,7 @@ def main(projectfile, argv):
 			pak = True
 
 	project = ProjectParser.Project( os.path.abspath(projectfile) )
-	project.Package(config, platform, build, cook, pak, os.path.abspath(output) )
+	project.Package(config, platform, build, cook, pak, output)
 
 if __name__ == "__main__":
 	main(sys.argv[1], sys.argv[2:])
