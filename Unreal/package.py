@@ -40,7 +40,7 @@ def main(projectfile, argv):
 			pak = True
 
 	project = ProjectParser.Project( os.path.abspath(projectfile) )
-	project.Package(config, platform, build, cook, pak, output)
+	project.Package(config, platform, build, cook, pak, os.path.abspath(output) )
 
 if __name__ == "__main__":
 	main(sys.argv[1], sys.argv[2:])
