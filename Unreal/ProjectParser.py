@@ -113,6 +113,12 @@ class Project:
 			commands = [prog, self.project_path.replace(".uproject", ".sln")]
 			subprocess.Popen(commands, shell=False)
 
+	def RunUnCookedGame(self):
+		prog = self.unreal_path + "\\Engine\\Binaries\\Win64\\UE4Editor.exe"
+
+		commands = [prog, self.project_path, "-game"]
+		subprocess.call( commands, shell=True )
+
 if __name__ == "__main__":
 	pass
 	#project = Project("<ProjectPath>")

@@ -5,7 +5,12 @@
 # - Revert file
 # - Sync file
 # TODO :
-#
+# - Get current revision of file
+# - Get current revision of workspace
+# - Adding file to project
+# - Removing file to project
+# - check if file is in project
+# - Revert file if unchanged
 
 import os
 import subprocess
