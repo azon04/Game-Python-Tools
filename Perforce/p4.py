@@ -24,7 +24,8 @@ p4pass = 0
 enabledLog = False
 showOutput = True
 
-def Init(port, client, user, passwd):
+
+def init(port, client, user, passwd):
 	global p4port
 	global p4client
 	global p4user
@@ -35,52 +36,52 @@ def Init(port, client, user, passwd):
 	p4user = user
 	p4pass = passwd
 
-def CallP4Function(funcName, options, filePath = ""):
+
+def callP4Function(funcName, options, filePath=""):
 	arr = ["p4"]
 
-	if (p4port != 0) :
-		arr.extend(["-p", p4port, "-P", p4pass, "-u", p4user, "-c", p4client]);
+	if p4port != 0:
+		arr.extend( ["-p", p4port, "-P", p4pass, "-u", p4user, "-c", p4client] );
 
 	arr.append(funcName)
 
 	if options:
 		arr.extend(options)
 
-	if filePath != "" :
+	if filePath != "":
 		arr.append(filePath)
 
 	p = subprocess.Popen(arr)
 
 	p.wait()
 
-def CheckOutFile(pathfile, bAbsolutePath = True):
-	if(bAbsolutePath):
-		path = pathfile
-	else :
-		path = os.path.join(os.path.curdir(), pathfile)
 
-	CallP4Function("edit", [], path)
-
-
-def RevertFile(pathfile, bAbsolutePath=True, bOnlyUnchanged = False):
-	if(bAbsolutePath):
-		path = pathfile
-	else :
-		path = os.path.join(os.path.curdir(), pathfile)
-
-	options = []
-	if bOnlyUnchanged == True :
-		options.append("-a")
-
-	CallP4Function("revert", options, path)
-
-def Sync(pathfile="", bAbsolutePath=True):
-	if(bAbsolutePath):
+def checkOutFile(pathfile, bAbsolutePath=True):
+	if bAbsolutePath:
 		path = pathfile
 	else:
 		path = os.path.join(os.path.curdir(), pathfile)
 
-	CallP4Function("sync", [], path)
+	callP4Function("edit", [], path)
 
 
+def revertFile(pathfile, bAbsolutePath=True, bOnlyUnchanged=False):
+	if bAbsolutePath:
+		path = pathfile
+	else:
+		path = os.path.join(os.path.curdir(), pathfile)
 
+	options = []
+	if bOnlyUnchanged:
+		options.append("-a")
+
+	callP4Function("revert", options, path)
+
+
+def sync(pathfile="", bAbsolutePath=True):
+	if bAbsolutePath:
+		path = pathfile
+	else:
+		path = os.path.join(os.path.curdir(), pathfile)
+
+	callP4Function("sync", [], path)

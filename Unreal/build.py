@@ -8,6 +8,7 @@ import getopt
 import sys
 import os
 
+
 def main(projectfile, argv):
 	try:
 		opts, args = getopt.getopt(argv, "hm:pcr", ["module=", "platform=", "config=", "rebuild", "help"])
@@ -37,8 +38,9 @@ def main(projectfile, argv):
 		print "--module need to set"
 		sys.exit()
 
-	project = ProjectParser.Project( os.path.abspath(projectfile) )
-	project.Build(module_name, platform, config, rebuild)
+	project = ProjectParser.Project(os.path.abspath(projectfile))
+	project.build(module_name, platform, config, rebuild)
+
 
 if __name__ == "__main__":
 	main(sys.argv[1], sys.argv[2:])

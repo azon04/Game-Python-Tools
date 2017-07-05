@@ -5,6 +5,7 @@ import json
 import _winreg
 import subprocess
 
+
 class Project:
 
 	unreal_version = ""
@@ -12,11 +13,11 @@ class Project:
 	unreal_path = ""
 	version = ""
 
-	def __init__(self, project_path = ""):
-		if project_path != "" :
-			self.OpenProjectPath(project_path)
+	def __init__(self, project_path=""):
+		if project_path != "":
+			self.openProjectPath(project_path)
 
-	def OpenProjectPath(self, project_path):
+	def openProjectPath(self, project_path):
 		print project_path
 		self.project_path = project_path
 
@@ -43,7 +44,7 @@ class Project:
 				self.unreal_path = _winreg.QueryValueEx( key, self.unreal_version)[0]
 				self.unreal_path = self.unreal_path.replace("/", "\\")
 
-	def Build(self, module, platform, configuration, bRebuild = False):
+	def build(self, module, platform, configuration, bRebuild = False):
 		prog = self.unreal_path + "\\Engine\\Build\\BatchFiles\\"
 		if bRebuild:
 			prog = prog + "Rebuild.bat"
@@ -53,7 +54,7 @@ class Project:
 		commands = [prog, module, platform, configuration, self.project_path]
 		subprocess.call(commands, shell=True)
 
-	def Package(self, config, platform, bBuild, bCook, bPak, output_folder_name = ""):
+	def package(self, config, platform, bBuild, bCook, bPak, output_folder_name =""):
 		# See https://wiki.unrealengine.com/How_to_package_your_game_with_commands
 		prog = self.unreal_path + "\\Engine\\Build\\BatchFiles\\" + "RunUAT.bat"
 		buildCookRunArg = "BuildCookRun"
@@ -85,10 +86,10 @@ class Project:
 
 		subprocess.call(commands,shell=True)
 
-	def GenerateVSProject(self):
+	def generateVSProject(self):
 		# See HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\EpicGames\Unreal Engine
 		# and UnrealVersionSelector.exe /projectfiles FOLDER_OF_THE_PROJECT
-		if self.unreal_version.startswith( "4." ):
+		if self.unreal_version.startswith("4."):
 			regHandle = _winreg.ConnectRegistry(None, _winreg.HKEY_LOCAL_MACHINE)
 			key = _winreg.OpenKeyEx(regHandle, "SOFTWARE\\EpicGames\\Unreal Engine")
 			if key:
@@ -103,7 +104,7 @@ class Project:
 
 			subprocess.call(commands, shell=True)
 
-	def RunVS(self):
+	def runVS(self):
 		# See https://pascoal.net/2011/04/29/getting-visual-studio-installation-directory/
 		regHandle = _winreg.ConnectRegistry(None, _winreg.HKEY_LOCAL_MACHINE)
 		key = _winreg.OpenKeyEx(regHandle, "SOFTWARE\\Microsoft\\VisualStudio\\14.0")
@@ -113,16 +114,17 @@ class Project:
 			commands = [prog, self.project_path.replace(".uproject", ".sln")]
 			subprocess.Popen(commands, shell=False)
 
-	def RunUnCookedGame(self):
+	def runUnCookedGame(self):
 		prog = self.unreal_path + "\\Engine\\Binaries\\Win64\\UE4Editor.exe"
 
 		commands = [prog, self.project_path, "-game"]
 		subprocess.call( commands, shell=True )
 
+
 if __name__ == "__main__":
 	pass
 	#project = Project("<ProjectPath>")
-	#project.Build("<Project>Editor", "Win64", "Development", True)
-	#project.Package("Development", "Win32", True, True, True, "archivepath")
-	#project.GenerateVSProject()
-	#project.RunVS()
+	#project.build("<Project>Editor", "Win64", "Development", True)
+	#project.package("Development", "Win32", True, True, True, "archivepath")
+	#project.generateVSProject()
+	#project.runVS()

@@ -8,6 +8,7 @@ import getopt
 import sys
 import os
 
+
 def main(projectfile, argv):
 	try:
 		opts, args = getopt.getopt(argv, "h", ["help", "generate"])
@@ -24,11 +25,12 @@ def main(projectfile, argv):
 		elif o == "--generate":
 			generateVS = True
 
-	project = ProjectParser.Project( os.path.abspath(projectfile) )
+	project = ProjectParser.Project(os.path.abspath(projectfile))
 	if generateVS:
-		project.GenerateVSProject()
+		project.generateVSProject()
 
-	project.RunVS()
+	project.runVS()
+
 
 if __name__ == "__main__":
 	main(sys.argv[1], sys.argv[2:])
