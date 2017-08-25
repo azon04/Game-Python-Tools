@@ -87,17 +87,11 @@ class Project:
 		subprocess.call(commands,shell=True)
 
 	def generateVSProject(self):
-		# See HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\EpicGames\Unreal Engine
-		# and UnrealVersionSelector.exe /projectfiles FOLDER_OF_THE_PROJECT
 		if self.unreal_version.startswith("4."):
-			regHandle = _winreg.ConnectRegistry(None, _winreg.HKEY_LOCAL_MACHINE)
-			key = _winreg.OpenKeyEx(regHandle, "SOFTWARE\\EpicGames\\Unreal Engine")
-			if key:
-				epicGameInstallation = _winreg.QueryValueEx(key, "INSTALLDIR")[0]
-				prog = epicGameInstallation + "Launcher\\Engine\\Binaries\\Win64\\UnrealVersionSelector.exe"
-				commands = [prog, "/projectfiles", self.project_path]
+			prog = self.unreal_path + "\\Engine\\Binaries\\DotNET\\UnrealBuildTool.exe"
+			commands = [prog, "-projectfiles", self.project_path]  # For some reason the project can't use quote or double quote
 
-				subprocess.call(commands, shell=True)
+			subprocess.call( commands, shell=True )
 		else:
 			prog = self.unreal_path + "Engine\\Build\\BatchFiles\\GenerateProjectFiles.bat"
 			commands = [prog, self.project_path]
