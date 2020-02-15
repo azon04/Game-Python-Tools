@@ -155,11 +155,11 @@ class ParamLineWidget(QWidget):
         self.removeButton.clicked.connect( self.onRemove_Clicked )
     
     def updateUI(self, paramObject):
-        self.paramObject = paramObject
         self.paramLabel.setText( self.paramObject[ "paramName" ] )
 
         # Clear the layout value
         for i in range(self.layoutValue.count()-1, -1, -1):
+            self.layoutValue.itemAt(i).widget().deleteLater()
             self.layoutValue.removeItem(self.layoutValue.itemAt(i))
         
         paramType = self.paramObject[ "paramType" ]
@@ -192,7 +192,10 @@ class ParamLineWidget(QWidget):
         if dialog.result() == QDialog.Accepted:
             paramObject = dialog.getNewParamTemplate()
             if self.paramObject[ "paramType" ] != paramObject[ "paramType" ] or self.paramObject[ "paramName" ] != paramObject[ "paramName" ] :
+                self.paramObject = paramObject
                 self.updateUI(dialog.getNewParamTemplate())
+            else:
+                self.paramObject = paramObject
 
     def onRemove_Clicked(self):
         if self.removeFunction is not None:
