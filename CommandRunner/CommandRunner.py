@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 import subprocess
+import json
 
 # CONST VARIABLE
 
@@ -253,12 +254,24 @@ class CommandRunner:
 
         self.rawCommandLabel = QLabel()
     
+    def setupManuBar(self):
+        self.menuBar = QMenuBar()
+        actionFile = self.menuBar.addMenu("&File")
+        self.openFormatAction = actionFile.addAction("Open Command Format...")
+        self.saveFormatAction = actionFile.addAction("Save Command Format...")
+        actionFile.addSeparator()
+        self.exitAction = actionFile.addAction("Quit")
+
     def setupLayout(self):
         layoutWidget = QWidget()
 
         # Main Layout
         layout = QVBoxLayout()
         
+        # Setup Menu Bar
+        self.setupManuBar()
+        layout.addWidget(self.menuBar)
+
         # Command Line Input button
         commandPathLayout = QHBoxLayout()
         commandPathLayout.addWidget(self.commandPathLineEdit)
@@ -297,10 +310,50 @@ class CommandRunner:
         self.newParamButton.clicked.connect( self.onNewParam_Clicked )
         self.generateCommandButton.clicked.connect( self.onGenerateCommand_Clicked )
         self.runPusthButton.clicked.connect( self.onRun_Clicked )
+        self.saveFormatAction.triggered.connect( self.onSaveFormatAction_Triggered )
+        self.openFormatAction.triggered.connect( self.OnOpenFormatAction_Triggered )
+        self.exitAction.triggered.connect( qApp.quit )
 
     def showUI(self):
         self.window.show()
         self.app.exec_()
+
+    def onSaveFormatAction_Triggered(self):
+        fileResults = QFileDialog.getSaveFileName(self.window, "Save Command Format...", filter="*.json")
+        filePath = fileResults[0]
+        if len(filePath) > 0:
+            try:
+                f = open(filePath, "w")
+                paramObjects = []
+                for param in self.params:
+                    paramObjects.append( param.paramObject )
+                saveObject = {}
+                saveObject[ "params" ] = paramObjects
+                f.write(json.dumps( saveObject ))
+                f.close()
+            except:
+                QMessageBox.warning(self.window, "Save Command Format Failed", "Failed to save command format to " + filePath)
+
+    def OnOpenFormatAction_Triggered(self):
+        fileResults = QFileDialog.getOpenFileName(self.window, "Open Command Format", filter="*.json")
+        filePath = fileResults[0]
+        if len(filePath) > 0:
+            try:
+                f = open(filePath, "r")
+                saveObject = json.load(f)
+                paramObjects = saveObject[ "params" ]
+                if paramObjects is not None:
+                    for param in self.params:
+                        param.deleteLater()
+                    self.params.clear()
+                    for paramObject in paramObjects:
+                        paramWidget = ParamLineWidget(paramObject)
+                        self.paramsLayout.addWidget(paramWidget)
+                        paramWidget.removeFunction = self.removeParam
+                        self.params.append( paramWidget )
+                f.close()
+            except:
+                QMessageBox.warning(self.window, "Open Command Format Failed", "Failed to open command format from " + filePath)
 
     def onGenerateCommand_Clicked(self):
         self.rawCommandLabel.setText( self.getRawCommand() )
